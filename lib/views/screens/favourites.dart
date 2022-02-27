@@ -11,6 +11,11 @@ class FavouriteScreen extends StatefulWidget {
 class _FavouriteScreenState extends State<FavouriteScreen> {
   @override
   Widget build(BuildContext context) {
-    return AppBar(title: Text('Favourites'), centerTitle: true,);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Favourites'),
+        centerTitle: true,
+      ),
+    );
   }
 }

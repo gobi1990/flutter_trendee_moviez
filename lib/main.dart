@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:trendee_moviez/views/home.dart';
+import 'package:provider/provider.dart';
+import 'package:trendee_moviez/routes.dart';
+import 'package:trendee_moviez/view_models/global_view_model.dart';
+import 'package:trendee_moviez/views/screens/initial_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,12 +11,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Trendee Moviez',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => GlobalViewModel())],
+      child: MaterialApp(
+        title: 'Trendee Moviez',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: InitialScreen(),
+        routes: Routes.routes,
       ),
-      home: HomeScreen(),
     );
   }
 }

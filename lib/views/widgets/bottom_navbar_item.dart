@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:trendee_moviez/views/widgets/text_view.dart';
 
-import '../../deviceutils.dart';
+import '../../utils/deviceutils.dart';
 
 class BottomNavBarItem extends StatelessWidget {
   final int itemIndex;
-  final String title;
-  final String activeIcon;
-  final String inactiveIcon;
+  final String? title;
+  final Icon activeIcon;
+  final Icon inactiveIcon;
   final int currentIndex;
   final void Function(int index) onTapAction;
 
   const BottomNavBarItem({
     Key? key,
     required this.itemIndex,
-    required this.title,
+    this.title,
     required this.activeIcon,
     required this.inactiveIcon,
     required this.currentIndex,
@@ -37,8 +37,7 @@ class BottomNavBarItem extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Image.asset(
-                    (currentIndex == itemIndex) ? activeIcon : inactiveIcon),
+                (currentIndex == itemIndex) ? activeIcon : inactiveIcon,
                 SizedBox(
                   height: 10,
                 ),

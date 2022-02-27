@@ -11,9 +11,11 @@ class MoreScreen extends StatefulWidget {
 class _MoreScreenState extends State<MoreScreen> {
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Text('More'),
-      centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('More'),
+        centerTitle: true,
+      ),
     );
   }
 }
