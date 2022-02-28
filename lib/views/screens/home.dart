@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:trendee_moviez/constants/assets.dart';
 import 'package:trendee_moviez/constants/strings.dart';
 import 'package:trendee_moviez/routes.dart';
+import 'package:trendee_moviez/services/movies_api_service.dart';
 import 'package:trendee_moviez/utils/deviceutils.dart';
 import 'package:trendee_moviez/view_models/global_view_model.dart';
+import 'package:trendee_moviez/view_models/movies_view_model.dart';
 import 'package:trendee_moviez/views/widgets/back_drop_card.dart';
 import 'package:trendee_moviez/views/widgets/list_item_card.dart';
 import 'package:trendee_moviez/views/widgets/text_view.dart';
@@ -19,9 +22,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     GlobalViewModel _globalModel =
         Provider.of<GlobalViewModel>(context, listen: false);
+
+    MoviesViewModel _moviesModel = Provider.of<MoviesViewModel>(
+      context,
+    );
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -44,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                     padding: EdgeInsets.only(left: 15, bottom: 10),
                     child: TextView(
-                      text: Strings.now_playing,
+                      text: Strings.trending,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     )),
@@ -53,28 +66,50 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: IconButton(
                         onPressed: () {
                           _globalModel.setBottomNavIndex(3);
-                          //    Navigator.of(context).pushNamed(Routes.search);
                         },
                         icon: Icon(Icons.search)))
               ],
             ),
             ////////////// Now Playing Movies List ...............
+
             SizedBox(
-              height: 200.0,
-              child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return BackDropCard();
-                  }),
+              height: 220,
+              child: Stack(
+                children: [
+                  ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _moviesModel.trendingMovies.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return BackDropCard(
+                          title: _moviesModel.trendingMovies[index].title,
+                          description:
+                              _moviesModel.trendingMovies[index].overview,
+                          imageUrl:
+                              _moviesModel.trendingMovies[index].backdropPath,
+                        );
+                      }),
+                  Visibility(
+                    child: Center(
+                      child: SpinKitFadingCircle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    visible: _moviesModel.loading,
+                  )
+                ],
+              ),
             ),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                    padding: EdgeInsets.only(top: 15, left: 15, bottom: 10),
+                    padding: EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                    ),
                     child: TextView(
                       text: Strings.popular,
                       fontSize: 20,
@@ -87,8 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: GridView.builder(
               padding: EdgeInsets.only(
                   top: 20, bottom: DeviceUtils.getScaledHeight(context, 0.02)),
-              itemCount: //5,
-                  5,
+              itemCount: _moviesModel.popularMovies.length,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,7 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20),
               itemBuilder: (context, index) {
-                return ListItemCard();
+                return ListItemCard(
+                  title: _moviesModel.popularMovies[index].title,
+                  imageUrl: _moviesModel.popularMovies[index].posterPath,
+                );
               },
             ))
           ],

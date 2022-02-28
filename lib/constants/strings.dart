@@ -5,5 +5,7 @@ class Strings {
 
   static const now_playing = 'Now Playing';
 
+  static const trending = 'Trending Movies';
+
   static const popular = 'Popular Movies';
 }
