@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icon(Icons.search)))
               ],
             ),
-            ////////////// Now Playing Movies List ...............
+            ////////////// Tredning Movies List ...............
 
             SizedBox(
               height: 220,
@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ListItemCard(
                   title: _moviesModel.popularMovies[index].title,
                   imageUrl: _moviesModel.popularMovies[index].posterPath,
+                  index: index,
                 );
               },
             ))

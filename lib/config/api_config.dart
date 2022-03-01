@@ -22,4 +22,7 @@ class APIConfig {
 
   ////////////// Trending movies....................
   static String trending_movies = "trending/movie/week";
+
+  ////////////// Search Movies....................
+  static String search_movies = "search/movie";
 }

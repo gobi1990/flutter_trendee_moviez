@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:trendee_moviez/views/screens/favourites.dart';
 import 'package:trendee_moviez/views/screens/home.dart';
 import 'package:trendee_moviez/views/screens/more.dart';
+import 'package:trendee_moviez/views/screens/movie_details_screen.dart';
 import 'package:trendee_moviez/views/screens/search.dart';
 
 class Routes {
@@ -13,6 +14,7 @@ class Routes {
   static const String more = '/views/screens/more';
   static const String favorites = '/views/screens/favourites';
   static const String search = '/views/screens/search';
+  static const String moviedetail = '/views/screens/movie_details_screen';
 
 //////////// Bottom Navigation screens.............
   static final List<Widget> bottommNavigationScreens = [
@@ -23,7 +25,8 @@ class Routes {
   ];
 
   static final routes = <String, WidgetBuilder>{
-    search: (BuildContext context) => FavouriteScreen()
+    search: (BuildContext context) => FavouriteScreen(),
+    moviedetail: (BuildContext context) => MovieDetailsScreen()
   };
 
 ///////////// Screen route generator ..................
@@ -37,6 +40,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => FavouriteScreen());
       case search:
         return MaterialPageRoute(builder: (_) => SearchScreen());
+      case moviedetail:
+        return MaterialPageRoute(builder: (_) => MovieDetailsScreen());
       default:
         return errorRoute();
     }

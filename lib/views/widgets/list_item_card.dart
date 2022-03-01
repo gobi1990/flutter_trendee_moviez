@@ -1,14 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:trendee_moviez/config/api_config.dart';
 import 'package:trendee_moviez/constants/assets.dart';
+import 'package:trendee_moviez/routes.dart';
+import 'package:trendee_moviez/view_models/movies_view_model.dart';
 import 'package:trendee_moviez/views/widgets/text_view.dart';
 
 class ListItemCard extends StatefulWidget {
   final String? imageUrl;
   final String? title;
-  const ListItemCard({Key? key, this.imageUrl, this.title}) : super(key: key);
+  final int? index;
+  const ListItemCard({Key? key, this.imageUrl, this.title, this.index})
+      : super(key: key);
 
   @override
   State<ListItemCard> createState() => _ListItemCardState();
@@ -17,8 +22,13 @@ class ListItemCard extends StatefulWidget {
 class _ListItemCardState extends State<ListItemCard> {
   @override
   Widget build(BuildContext context) {
+    MoviesViewModel _moviesModel = Provider.of<MoviesViewModel>(
+      context,
+    );
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(Routes.moviedetail);
+      },
       child: Container(
         width: 180,
         height: 250,
@@ -61,9 +71,13 @@ class _ListItemCardState extends State<ListItemCard> {
             ),
             Positioned(
                 child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _moviesModel.addOrRemoveFavouriteList(widget.index!);
+              },
               icon: Icon(
-                Icons.favorite_border,
+                _moviesModel.favouriteMoviesBoolList[widget.index!]
+                    ? Icons.favorite
+                    : Icons.favorite_border,
                 color: Colors.white,
               ),
             ))

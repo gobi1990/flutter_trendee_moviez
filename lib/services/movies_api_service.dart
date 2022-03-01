@@ -17,8 +17,8 @@ class MoviesApiService {
   Future<List<Movie>?> getAllPopularMoviesList() async {
     Response? popularMoviesListResponse;
 
-    popularMoviesListResponse = await _httpService!
-        .getRequest(APIConfig.popular_movies, 'PopularMoviesListResponse');
+    popularMoviesListResponse =
+        await _httpService!.getRequest(APIConfig.popular_movies);
 
     List<Movie> _moviesList = [];
     _moviesList =
@@ -31,8 +31,21 @@ class MoviesApiService {
   Future<List<Movie>?> getAllTrendingMoviesList() async {
     Response? moviesListResponse;
 
-    moviesListResponse = await _httpService!
-        .getRequest(APIConfig.trending_movies, 'PopularMoviesListResponse');
+    moviesListResponse =
+        await _httpService!.getRequest(APIConfig.trending_movies);
+
+    List<Movie> _moviesList = [];
+    _moviesList = Movie.listFromJson(moviesListResponse!.data['results']);
+
+    return _moviesList;
+  }
+
+  //////////////// Get Searched Movies list ...................
+  Future<List<Movie>?> getSearchedMoviesList(String query) async {
+    Response? moviesListResponse;
+
+    moviesListResponse =
+        await _httpService!.getRequest(APIConfig.search_movies, query: query);
 
     List<Movie> _moviesList = [];
     _moviesList = Movie.listFromJson(moviesListResponse!.data['results']);

@@ -22,14 +22,21 @@ class HttpService {
     initializeInterceptors();
   }
 
-  ////////////////////// Dio Get Request ..............
+  ////////////////////// Dio Get Request..............
 
-  Future<Response?> getRequest(String endPoint, String serializeType) async {
+  Future<Response?> getRequest(String endPoint, {String? query}) async {
     Response? response;
 
     try {
       response = await _dio!.get(
-        APIConfig.base_url + endPoint + '?api_key=' + APIConfig.api_key,
+        (query != null && query.isNotEmpty)
+            ? APIConfig.base_url +
+                endPoint +
+                '?api_key=' +
+                APIConfig.api_key +
+                '&query=' +
+                query
+            : APIConfig.base_url + endPoint + '?api_key=' + APIConfig.api_key,
       );
     } on DioError catch (e) {
       print(e);
@@ -41,34 +48,8 @@ class HttpService {
       return null;
     } else if (response.data != null) {
       return response;
-      // return deserialize(response.data, serializeType);
     } else {
       return null;
-    }
-
-    // return decoded;
-  }
-
-  dynamic deserialize(String jsonVal, String targetType) {
-    // Remove all spaces.  Necessary for reg expressions as well.
-    targetType = targetType.replaceAll(' ', '');
-
-    if (targetType == 'String') return jsonVal;
-
-    var decodedJson = json.decode(jsonVal);
-    return _deserialize(decodedJson, targetType);
-  }
-
-  dynamic _deserialize(dynamic value, String targetType) {
-    try {
-      switch (targetType) {
-        case 'String':
-          return '$value';
-        case 'PopularMoviesListResponse':
-          return PopularMoviesListResponse.fromJson(value);
-      }
-    } catch (e) {
-      print(e);
     }
   }
 

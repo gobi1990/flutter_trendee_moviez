@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:trendee_moviez/utils/deviceutils.dart';
+import 'package:trendee_moviez/view_models/movies_view_model.dart';
 import 'package:trendee_moviez/views/widgets/list_item_card.dart';
 import 'package:trendee_moviez/views/widgets/text_view.dart';
 
@@ -12,8 +14,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final _seachController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    MoviesViewModel _moviesModel = Provider.of<MoviesViewModel>(
+      context,
+    );
+
     return Scaffold(
       body: Column(
         mainAxisSize: MainAxisSize.min,
@@ -24,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              /////////// Search Text field ................
               Container(
                   margin: EdgeInsets.symmetric(
                     vertical: 15,
@@ -46,6 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       Container(
                         width: DeviceUtils.getScaledWidth(context, 0.7),
                         child: TextFormField(
+                          controller: _seachController,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: ' Search a movie...'),
@@ -54,20 +64,31 @@ class _SearchScreenState extends State<SearchScreen> {
                       Padding(
                           padding: EdgeInsets.only(left: 10, right: 10),
                           child: IconButton(
-                              onPressed: () {}, icon: Icon(Icons.search)))
+                              onPressed: () {
+                                _moviesModel.getSearchedMoviesListFromApi(
+                                    _seachController.text);
+                              },
+                              icon: Icon(Icons.search)))
                     ],
                   )),
             ],
           ),
           Expanded(
               child: ListView.builder(
-                  itemCount: 5,
+                  itemCount: _moviesModel.searchMovies.length,
                   itemBuilder: (context, index) {
                     return Container(
+                        
                         padding: EdgeInsets.symmetric(
-                          horizontal: 5,
+                          horizontal: 10,
                         ),
-                        child: ListItemCard());
+                        child: Row(children: [
+                          ListItemCard(
+                            title: _moviesModel.searchMovies[index].title,
+                            imageUrl:
+                                _moviesModel.searchMovies[index].posterPath,
+                          )
+                        ]));
                   }))
         ],
       ),
