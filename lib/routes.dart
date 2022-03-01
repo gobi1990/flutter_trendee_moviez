@@ -21,7 +21,8 @@ class Routes {
     HomeScreen(),
     FavouriteScreen(),
     MoreScreen(),
-    SearchScreen()
+    SearchScreen(),
+    MovieDetailsScreen()
   ];
 
   static final routes = <String, WidgetBuilder>{

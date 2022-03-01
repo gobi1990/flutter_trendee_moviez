@@ -4,30 +4,44 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:trendee_moviez/config/api_config.dart';
 import 'package:trendee_moviez/constants/assets.dart';
+import 'package:trendee_moviez/models/movie.dart';
 import 'package:trendee_moviez/routes.dart';
+import 'package:trendee_moviez/view_models/global_view_model.dart';
 import 'package:trendee_moviez/view_models/movies_view_model.dart';
 import 'package:trendee_moviez/views/widgets/text_view.dart';
 
 class ListItemCard extends StatefulWidget {
-  final String? imageUrl;
-  final String? title;
   final int? index;
-  const ListItemCard({Key? key, this.imageUrl, this.title, this.index})
-      : super(key: key);
+  final Movie? movieItem;
+  const ListItemCard({Key? key, this.index, this.movieItem}) : super(key: key);
 
   @override
   State<ListItemCard> createState() => _ListItemCardState();
 }
 
 class _ListItemCardState extends State<ListItemCard> {
+  int cardIndex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    cardIndex = widget.index!;
+  }
+
   @override
   Widget build(BuildContext context) {
+    GlobalViewModel _globalModel =
+        Provider.of<GlobalViewModel>(context, listen: false);
     MoviesViewModel _moviesModel = Provider.of<MoviesViewModel>(
       context,
+      listen: false,
     );
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(Routes.moviedetail);
+        _moviesModel.setSelectedMovie(widget.movieItem!);
+        //  Navigator.of(context).pushNamed(Routes.moviedetail);
+
+        _globalModel.setBottomNavIndex(4);
       },
       child: Container(
         width: 180,
@@ -38,8 +52,8 @@ class _ListItemCardState extends State<ListItemCard> {
             color: Colors.yellow,
             boxShadow: [
               BoxShadow(
-                  blurRadius: 4,
-                  spreadRadius: 2,
+                  blurRadius: 6,
+                  spreadRadius: 4,
                   offset: Offset(2, 3),
                   color: Colors.black.withOpacity(0.1))
             ]),
@@ -48,8 +62,8 @@ class _ListItemCardState extends State<ListItemCard> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: widget.imageUrl != null
-                    ? '${APIConfig.image_poster_url}${widget.imageUrl}'
+                imageUrl: widget.movieItem!.posterPath != null
+                    ? '${APIConfig.image_poster_url}${widget.movieItem!.posterPath}'
                     : Assets.image_not_available,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
@@ -75,7 +89,7 @@ class _ListItemCardState extends State<ListItemCard> {
                 _moviesModel.addOrRemoveFavouriteList(widget.index!);
               },
               icon: Icon(
-                _moviesModel.favouriteMoviesBoolList[widget.index!]
+                _moviesModel.favouriteMoviesBoolList[cardIndex]
                     ? Icons.favorite
                     : Icons.favorite_border,
                 color: Colors.white,

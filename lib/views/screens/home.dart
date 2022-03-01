@@ -132,8 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 20),
               itemBuilder: (context, index) {
                 return ListItemCard(
-                  title: _moviesModel.popularMovies[index].title,
-                  imageUrl: _moviesModel.popularMovies[index].posterPath,
+                  movieItem: _moviesModel.popularMovies[index],
                   index: index,
                 );
               },

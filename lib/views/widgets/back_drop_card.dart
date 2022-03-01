@@ -29,9 +29,9 @@ class _BackDropCardState extends State<BackDropCard> {
           boxShadow: [
             BoxShadow(
                 blurRadius: 4,
-                spreadRadius: 2,
+                spreadRadius: 6,
                 offset: Offset(2, 3),
-                color: Colors.black.withOpacity(0.25))
+                color: Colors.black.withOpacity(0.06))
           ]),
       child: Stack(
         children: [
@@ -76,9 +76,7 @@ class _BackDropCardState extends State<BackDropCard> {
           ),
           Positioned(
               child: IconButton(
-            onPressed: () {
-              
-            },
+            onPressed: () {},
             icon: Icon(
               Icons.favorite_border,
               color: Colors.white,

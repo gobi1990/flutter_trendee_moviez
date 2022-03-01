@@ -15,6 +15,7 @@ class MoviesViewModel with ChangeNotifier {
 
   bool _loading = false;
   bool get loading => _loading;
+
   List<Movie> get trendingMovies => _trendingMovies;
 
   List<Movie> get popularMovies => _popularMovies;
