@@ -53,12 +53,12 @@ class PosterImageCard extends StatelessWidget {
           ),
           placeholder: (context, url) =>
               Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => Center(
-            child: Image.asset(
-              Assets.image_not_available,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+          errorWidget: (context, url, error) => Center(child: Container()
+              // Image.asset(
+              //   Assets.image_not_available,
+              //   fit: BoxFit.fitWidth,
+              // ),
+              ),
         ),
       ),
     );

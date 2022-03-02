@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trendee_moviez/constants/font_family.dart';
 
 class TextView extends StatelessWidget {
   final String text;
@@ -41,11 +42,10 @@ class TextView extends StatelessWidget {
         overflow: overflow,
         style: textStyle ??
             TextStyle(
-              fontWeight: fontWeight ?? FontWeight.normal,
-              color: textColor ?? Colors.black,
-              fontSize: fontSize ?? 14,
-              // fontFamily: fontFamily ?? FontFamily.poppins
-            ),
+                fontWeight: fontWeight ?? FontWeight.normal,
+                color: textColor ?? Colors.black,
+                fontSize: fontSize ?? 14,
+                fontFamily: fontFamily ?? FontFamily.poppins),
         textAlign: textAlign ?? TextAlign.center,
       ),
     );

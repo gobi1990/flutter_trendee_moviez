@@ -87,18 +87,23 @@ class _BackDropCardState extends State<BackDropCard> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     child: TextView(
                       text: widget.movieItem!.title ?? '',
-                      fontSize: 25,
-                      maxLines: 2,
+                      fontSize: 22,
+                      maxLines: 1,
                       fontWeight: FontWeight.bold,
                       textColor: Colors.white,
+                      overflow: TextOverflow.ellipsis,
                     )),
               ],
             ),
             Positioned(
                 child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _moviesModel.addOrRemoveFavouriteList(widget.movieItem!);
+              },
               icon: Icon(
-                Icons.favorite_border,
+                _moviesModel.favouritesMovieIds.contains(widget.movieItem!.id!)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
                 color: Colors.white,
               ),
             ))

@@ -6,6 +6,8 @@ import 'package:trendee_moviez/services/cast_api_service.dart';
 import 'package:trendee_moviez/services/movies_api_service.dart';
 
 class MoviesViewModel with ChangeNotifier {
+  final _movieApiService = MoviesApiService.getInstance();
+
   List<Movie> _trendingMovies = [];
 
   List<Movie> _popularMovies = [];
@@ -14,15 +16,14 @@ class MoviesViewModel with ChangeNotifier {
 
   List<Movie> _favouoritesMovies = [];
 
+  List<int> _favouoritesMovieIds = [];
+
   List<Cast> _movieCastList = [];
-
-  List<bool> favouriteMoviesBoolList = [];
-
-  CastMember? _selectedCastMember;
 
   Movie? _selectedMovie;
 
   bool _loading = false;
+
   bool get loading => _loading;
 
   List<Movie> get trendingMovies => _trendingMovies;
@@ -33,11 +34,16 @@ class MoviesViewModel with ChangeNotifier {
 
   List<Movie> get favouritesMovies => _favouoritesMovies;
 
+  List<int> get favouritesMovieIds => _favouoritesMovieIds;
+
   List<Cast> get movieCastList => _movieCastList;
 
   Movie? get selectedMovie => _selectedMovie;
 
-  CastMember? get selectedCastMember => _selectedCastMember;
+  MoviesViewModel() {
+    getTrendingMovieListFromApi();
+    getPopularMoviesListFromApi();
+  }
 
   setSelectedMovie(Movie movie) {
     _selectedMovie = movie;
@@ -47,18 +53,8 @@ class MoviesViewModel with ChangeNotifier {
     getAllMovieCastListFromApi(id.toString());
   }
 
-  MoviesViewModel() {
-    getTrendingMovieListFromApi();
-    getPopularMoviesListFromApi();
-
-    //setSearchedMoviesList(popularMovies);
-  }
-
-  final _movieApiService = MoviesApiService.getInstance();
-  final _castApiService = CastApiService.getInstance();
-
   setLoading(bool value) {
-    _loading = loading;
+    _loading = value;
     notifyListeners();
   }
 
@@ -82,10 +78,6 @@ class MoviesViewModel with ChangeNotifier {
     _movieCastList = value;
   }
 
-  setCastMember(CastMember value) {
-    _selectedCastMember = value;
-  }
-
   getTrendingMovieListFromApi() async {
     setLoading(true);
     var response = await _movieApiService.getAllTrendingMoviesList();
@@ -104,10 +96,6 @@ class MoviesViewModel with ChangeNotifier {
     if (response != null) {
       setPopularMoviesList(response);
       setSearchedMoviesList(response);
-
-      for (var item in response) {
-        favouriteMoviesBoolList.add(false);
-      }
     }
 
     setLoading(false);
@@ -135,24 +123,15 @@ class MoviesViewModel with ChangeNotifier {
     setLoading(false);
   }
 
-  getCastMemberDetailsFromApi(String id) async {
-    setLoading(true);
-    var response = await _castApiService.getDetailsOfCastMember(id);
+  addOrRemoveFavouriteList(Movie? item) {
+    int? id = item?.id;
 
-    if (response != null) {
-      setCastMember(response);
-    }
-
-    setLoading(false);
-  }
-
-  addOrRemoveFavouriteList(int index, Movie item) {
-    favouriteMoviesBoolList[index] = !favouriteMoviesBoolList[index];
-
-    if (favouritesMovies.contains(item)) {
+    if (favouritesMovieIds.contains(id)) {
+      favouritesMovieIds.remove(id);
       favouritesMovies.remove(item);
     } else {
-      favouritesMovies.add(item);
+      favouritesMovieIds.add(id!);
+      favouritesMovies.add(item!);
     }
 
     notifyListeners();

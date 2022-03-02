@@ -4,9 +4,11 @@ import 'package:trendee_moviez/views/screens/cast_member_details.dart';
 
 import 'package:trendee_moviez/views/screens/favourites.dart';
 import 'package:trendee_moviez/views/screens/home.dart';
+import 'package:trendee_moviez/views/screens/initial_screen.dart';
 import 'package:trendee_moviez/views/screens/more.dart';
 import 'package:trendee_moviez/views/screens/movie_details_screen.dart';
 import 'package:trendee_moviez/views/screens/search.dart';
+import 'package:trendee_moviez/views/screens/splash.dart';
 
 class Routes {
   Routes._();
@@ -17,6 +19,8 @@ class Routes {
   static const String search = '/views/screens/search';
   static const String moviedetail = '/views/screens/movie_details_screen';
   static const String castMember = '/views/screens/cast_member_details';
+  static const String Splash = '/views/screens/splash';
+  static const String initial = '/views/screens/initial_screen';
 
 //////////// Navigation screens with botoom nav bar.............
   static final List<Widget> bottommNavigationScreens = [
@@ -25,7 +29,7 @@ class Routes {
     MoreScreen(),
     SearchScreen(),
     MovieDetailsScreen(),
-    CastMemberDetailsScreen()
+    CastMemberDetailsScreen(),
   ];
 
   static final routes = <String, WidgetBuilder>{
@@ -48,6 +52,10 @@ class Routes {
         return MaterialPageRoute(builder: (_) => MovieDetailsScreen());
       case castMember:
         return MaterialPageRoute(builder: (_) => CastMemberDetailsScreen());
+      case Splash:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
+      case initial:
+        return MaterialPageRoute(builder: (_) => InitialScreen());
       default:
         return errorRoute();
     }

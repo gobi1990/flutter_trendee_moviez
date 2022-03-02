@@ -36,106 +36,109 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
     );
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            /////// Title ..................
-            Container(
-                padding: EdgeInsets.only(
-                    top: DeviceUtils.getScaledHeight(context, 0.05),
-                    bottom: DeviceUtils.getScaledHeight(context, 0.02)),
-                child: TextView(
-                  text: Strings.app_name,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                )),
-            //////////// Search Button.................
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(left: 15, bottom: 10),
-                    child: TextView(
-                      text: Strings.trending,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: IconButton(
-                        onPressed: () {
-                          _globalModel.setBottomNavIndex(3);
-                        },
-                        icon: Icon(Icons.search)))
-              ],
-            ),
-            ////////////// Tredning Movies List ...............
-
-            SizedBox(
-              height: 220,
-              child: Stack(
-                children: [
-                  ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _moviesModel.trendingMovies.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BackDropCard(
-                          movieItem: _moviesModel.trendingMovies[index],
-                        );
-                      }),
-                  Visibility(
-                    child: Center(
-                      child: SpinKitFadingCircle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    visible: _moviesModel.loading,
-                  )
-                ],
-              ),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
+        extendBodyBehindAppBar: true,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                /////// Title ..................
+                Container(
                     padding: EdgeInsets.only(
-                      top: 15,
-                      left: 15,
-                    ),
+                        //top: DeviceUtils.getScaledHeight(context, 0.05),
+                        bottom: DeviceUtils.getScaledHeight(context, 0.02)),
                     child: TextView(
-                      text: Strings.popular,
-                      fontSize: 20,
+                      text: Strings.app_name,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                     )),
+                //////////// Search Button.................
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 15, bottom: 10),
+                        child: TextView(
+                          text: Strings.trending,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: IconButton(
+                            onPressed: () {
+                              _globalModel.setBottomNavIndex(3);
+                            },
+                            icon: Icon(Icons.search)))
+                  ],
+                ),
+                ////////////// Tredning Movies List ...............
+
+                SizedBox(
+                  height: 220,
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _moviesModel.trendingMovies.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return BackDropCard(
+                              movieItem: _moviesModel.trendingMovies[index],
+                            );
+                          }),
+                      Visibility(
+                        child: Center(
+                          child: SpinKitFadingCircle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        visible: _moviesModel.loading,
+                      )
+                    ],
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(
+                          top: 15,
+                          left: 15,
+                        ),
+                        child: TextView(
+                          text: Strings.popular,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ],
+                ),
+///////////////////// Popular movies grid ...................
+                Container(
+                    child: GridView.builder(
+                  padding: EdgeInsets.only(
+                      top: 20,
+                      bottom: DeviceUtils.getScaledHeight(context, 0.02)),
+                  itemCount: _moviesModel.popularMovies.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 3 / 4,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20),
+                  itemBuilder: (context, index) {
+                    return ListItemCard(
+                      movieItem: _moviesModel.popularMovies[index],
+                      index: index,
+                    );
+                  },
+                ))
               ],
             ),
-///////////////////// Popular movies grid ...................
-            Container(
-                child: GridView.builder(
-              padding: EdgeInsets.only(
-                  top: 20, bottom: DeviceUtils.getScaledHeight(context, 0.02)),
-              itemCount: _moviesModel.popularMovies.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 3 / 4,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20),
-              itemBuilder: (context, index) {
-                return ListItemCard(
-                  movieItem: _moviesModel.popularMovies[index],
-                  index: index,
-                );
-              },
-            ))
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
