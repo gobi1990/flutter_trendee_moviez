@@ -39,7 +39,6 @@ class _ListItemCardState extends State<ListItemCard> {
     return GestureDetector(
       onTap: () {
         _moviesModel.setSelectedMovie(widget.movieItem!);
-        //  Navigator.of(context).pushNamed(Routes.moviedetail);
 
         _globalModel.setBottomNavIndex(4);
       },
@@ -62,7 +61,7 @@ class _ListItemCardState extends State<ListItemCard> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: widget.movieItem!.posterPath != null
+                imageUrl: widget.movieItem?.posterPath != null
                     ? '${APIConfig.image_poster_url}${widget.movieItem!.posterPath}'
                     : Assets.image_not_available,
                 imageBuilder: (context, imageProvider) => Container(
@@ -86,7 +85,8 @@ class _ListItemCardState extends State<ListItemCard> {
             Positioned(
                 child: IconButton(
               onPressed: () {
-                _moviesModel.addOrRemoveFavouriteList(widget.index!);
+                _moviesModel.addOrRemoveFavouriteList(
+                    widget.index!, widget.movieItem!);
               },
               icon: Icon(
                 _moviesModel.favouriteMoviesBoolList[cardIndex]

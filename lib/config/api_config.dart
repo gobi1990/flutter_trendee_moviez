@@ -14,6 +14,9 @@ class APIConfig {
   ////////////////// Image Poster size...............
   static String image_poster_url = "https://image.tmdb.org/t/p/w500";
 
+  ////////////////// Image Profile size...............
+  static String image_profile_url = "https://image.tmdb.org/t/p/w185";
+
   ////////////// Popular movies....................
   static String popular_movies = "movie/popular";
 
@@ -25,4 +28,14 @@ class APIConfig {
 
   ////////////// Search Movies....................
   static String search_movies = "search/movie";
+
+  //////////// Get Movie Cast .....................
+  static String getMovieCastUrl(String id) {
+    return 'movie/' + id + '/credits';
+  }
+
+  //////////// Get Cast Member details .....................
+  static String getCastMemberDetailsUrl(String id) {
+    return 'person/' + id;
+  }
 }

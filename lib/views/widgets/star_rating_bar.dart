@@ -17,6 +17,7 @@ class StarRatingBar extends StatelessWidget {
         minRating: 1,
         direction: Axis.horizontal,
         allowHalfRating: true,
+        ignoreGestures: true,
         itemCount: 5,
         itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
         itemBuilder: (context, _) => Icon(

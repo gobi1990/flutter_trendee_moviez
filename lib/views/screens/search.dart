@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:trendee_moviez/utils/deviceutils.dart';
+import 'package:trendee_moviez/view_models/global_view_model.dart';
 import 'package:trendee_moviez/view_models/movies_view_model.dart';
 import 'package:trendee_moviez/views/widgets/list_item_card.dart';
 import 'package:trendee_moviez/views/widgets/star_rating_bar.dart';
@@ -17,12 +18,28 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _seachController = TextEditingController();
+  MoviesViewModel? _moviesModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    //   _moviesModel = Provider.of<MoviesViewModel>(context, listen: false);
+    // });
+
+    // _moviesModel?.setSearchedMoviesList(_moviesModel!.popularMovies);
+  }
 
   @override
   Widget build(BuildContext context) {
-    MoviesViewModel _moviesModel = Provider.of<MoviesViewModel>(
+    // MoviesViewModel
+    _moviesModel = Provider.of<MoviesViewModel>(
       context,
     );
+    GlobalViewModel _globalModel =
+        Provider.of<GlobalViewModel>(context, listen: false);
 
     return Scaffold(
       body: Column(
@@ -57,6 +74,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       Container(
                         width: DeviceUtils.getScaledWidth(context, 0.7),
                         child: TextFormField(
+                          onChanged: (query) {
+                            //   _moviesModel?.getSearchedMoviesListFromApi(query);
+                          },
                           controller: _seachController,
                           decoration: InputDecoration(
                               border: InputBorder.none,
@@ -67,8 +87,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: EdgeInsets.only(left: 10, right: 10),
                           child: IconButton(
                               onPressed: () {
-                                _moviesModel.getSearchedMoviesListFromApi(
+                                //////////// Search function from Movie view model.............
+                                _moviesModel?.getSearchedMoviesListFromApi(
                                     _seachController.text);
+                                //////// Hide Keyboard ..................
+                                DeviceUtils.hideKeyboard(context);
                               },
                               icon: Icon(Icons.search)))
                     ],
@@ -77,69 +100,84 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           Expanded(
               child: ListView.builder(
-                  itemCount: _moviesModel.searchMovies.length,
+                  itemCount: _moviesModel != null
+                      ? _moviesModel?.searchMovies.length
+                      : 0,
                   itemBuilder: (context, index) {
-                    return Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        child: Wrap(
-                            direction: Axis.horizontal,
-                            alignment: WrapAlignment.spaceAround,
-                            children: [
-                              ListItemCard(
-                                movieItem: _moviesModel.searchMovies[index],
-                                index: index,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 10),
-                                width: DeviceUtils.getScaledWidth(context, 0.4),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 5),
-                                        child: TextView(
-                                          text: _moviesModel
-                                                  .searchMovies[index].title ??
-                                              '',
-                                          fontSize: 22,
-                                          maxLines: 2,
-                                          fontWeight: FontWeight.bold,
-                                          textColor: Colors.black,
-                                        )),
-                                    Container(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 5),
-                                        child: TextView(
-                                          text: _moviesModel.searchMovies[index]
-                                                  .overview ??
-                                              '',
-                                          fontSize: 14,
-                                          maxLines: 8,
-                                          fontWeight: FontWeight.w500,
-                                          textColor: Colors.black,
-                                          textAlign: TextAlign.justify,
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                    StarRatingBar(
-                                      rating: (_moviesModel.searchMovies[index]
-                                                      .voteAverage !=
-                                                  null &&
-                                              _moviesModel.searchMovies[index]
-                                                      .voteAverage !=
-                                                  0)
-                                          ? double.parse((_moviesModel
-                                                      .searchMovies[index]
-                                                      .voteAverage! /
-                                                  2)
-                                              .toString())
-                                          : 0,
-                                    )
-                                  ],
+                    return InkWell(
+                      onTap: () {
+                        _moviesModel?.setSelectedMovie(
+                            _moviesModel!.searchMovies[index]);
+
+                        _globalModel.setBottomNavIndex(4, currentIndex: 3);
+                      },
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          child: Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.spaceAround,
+                              children: [
+                                ListItemCard(
+                                  movieItem: _moviesModel?.searchMovies[index],
+                                  index: index,
                                 ),
-                              )
-                            ]));
+                                Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  width:
+                                      DeviceUtils.getScaledWidth(context, 0.4),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 5),
+                                          child: TextView(
+                                            text: _moviesModel
+                                                    ?.searchMovies[index]
+                                                    .title ??
+                                                '',
+                                            fontSize: 22,
+                                            maxLines: 2,
+                                            fontWeight: FontWeight.bold,
+                                            textColor: Colors.black,
+                                          )),
+                                      Container(
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 5),
+                                          child: TextView(
+                                            text: _moviesModel
+                                                    ?.searchMovies[index]
+                                                    .overview ??
+                                                '',
+                                            fontSize: 14,
+                                            maxLines: 8,
+                                            fontWeight: FontWeight.w500,
+                                            textColor: Colors.black,
+                                            textAlign: TextAlign.justify,
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                      StarRatingBar(
+                                        rating: (_moviesModel
+                                                        ?.searchMovies[index]
+                                                        .voteAverage !=
+                                                    null &&
+                                                _moviesModel
+                                                        ?.searchMovies[index]
+                                                        .voteAverage !=
+                                                    0)
+                                            ? double.parse((_moviesModel
+                                                        ?.searchMovies[index]
+                                                        .voteAverage!)
+                                                    .toString()) /
+                                                2
+                                            : 0,
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ])),
+                    );
                   }))
         ],
       ),

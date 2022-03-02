@@ -44,9 +44,11 @@ class HttpService {
       print('error : $e');
     }
 
-    if (response!.statusCode! >= 400) {
+    int? statusCode = response?.statusCode;
+
+    if (statusCode! >= 400) {
       return null;
-    } else if (response.data != null) {
+    } else if (response?.data != null) {
       return response;
     } else {
       return null;

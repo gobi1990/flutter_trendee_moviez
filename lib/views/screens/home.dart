@@ -83,11 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _moviesModel.trendingMovies.length,
                       itemBuilder: (BuildContext context, int index) {
                         return BackDropCard(
-                          title: _moviesModel.trendingMovies[index].title,
-                          description:
-                              _moviesModel.trendingMovies[index].overview,
-                          imageUrl:
-                              _moviesModel.trendingMovies[index].backdropPath,
+                          movieItem: _moviesModel.trendingMovies[index],
                         );
                       }),
                   Visibility(

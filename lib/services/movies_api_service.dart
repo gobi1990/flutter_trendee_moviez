@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:trendee_moviez/config/api_config.dart';
+import 'package:trendee_moviez/models/cast.dart';
 import 'package:trendee_moviez/models/movie.dart';
 import 'package:trendee_moviez/models/popular_movies_list_response.dart';
 import 'package:trendee_moviez/services/http_service.dart';
@@ -51,5 +52,19 @@ class MoviesApiService {
     _moviesList = Movie.listFromJson(moviesListResponse!.data['results']);
 
     return _moviesList;
+  }
+
+  //////////////// Get All movie cast list ...................
+  Future<List<Cast>?> getAllMovieCast(String id) async {
+    Response? castListResponse;
+
+    castListResponse = await _httpService!.getRequest(
+      APIConfig.getMovieCastUrl(id),
+    );
+
+    List<Cast> _castList = [];
+    _castList = Cast.listFromJson(castListResponse!.data['cast']);
+
+    return _castList;
   }
 }

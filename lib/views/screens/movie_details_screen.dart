@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:trendee_moviez/config/api_config.dart';
 import 'package:trendee_moviez/constants/assets.dart';
 import 'package:trendee_moviez/constants/strings.dart';
+import 'package:trendee_moviez/models/cast.dart';
 import 'package:trendee_moviez/models/movie.dart';
 import 'package:trendee_moviez/utils/deviceutils.dart';
 import 'package:trendee_moviez/view_models/global_view_model.dart';
@@ -21,17 +23,32 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  MoviesViewModel? _moviesModel;
+  GlobalViewModel? _globalModel;
+  Movie? _selectedMovie;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    //   _moviesModel = Provider.of<MoviesViewModel>(context, listen: false);
+
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
-    MoviesViewModel? _moviesModel = Provider.of<MoviesViewModel>(
+    _moviesModel = Provider.of<MoviesViewModel>(
       context,
     );
 
-    GlobalViewModel _globalModel = Provider.of<GlobalViewModel>(
+    _globalModel = Provider.of<GlobalViewModel>(
       context,
     );
 
-    Movie? _selectedMovie = _moviesModel.selectedMovie;
+    _selectedMovie = _moviesModel?.selectedMovie;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -46,7 +63,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: IconButton(
                       onPressed: () {
-                        _globalModel.setBottomNavIndex(0);
+                        _globalModel?.setBottomNavIndex(
+                            _globalModel?.getCurrentNavIndex() != 0
+                                ? _globalModel!.getCurrentNavIndex()
+                                : 0);
                       },
                       icon: Icon(
                         Icons.chevron_left_rounded,
@@ -71,8 +91,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             ),
             PosterImageCard(
               imageUrl: _selectedMovie != null
-                  ? (_selectedMovie.posterPath != null
-                      ? '${APIConfig.image_poster_url}${_selectedMovie.posterPath}'
+                  ? (_selectedMovie?.posterPath != null
+                      ? '${APIConfig.image_poster_url}${_selectedMovie?.posterPath}'
                       : Assets.image_not_available)
                   : Assets.image_not_available,
             ),
@@ -109,7 +129,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ],
               ),
             ),
-            /////// Title ..................
+
+            /////// Overview ..................
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 child: TextView(
@@ -117,7 +138,25 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   fontSize: 18,
                   fontWeight: FontWeight.w300,
                   textAlign: TextAlign.justify,
-                )), //
+                )),
+            /////// Overview ..................
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: TextView(
+                      text: 'Cast',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.start,
+                    )),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15.0),
+              child: _buildCastListView(),
+            ), //
           ],
         ),
       ),
@@ -145,6 +184,53 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             fontSize: 20,
             fontWeight: FontWeight.bold,
           )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCastListView() {
+    return SizedBox(
+      height: 150,
+      child: Stack(
+        children: [
+          ListView.builder(
+              physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _moviesModel?.movieCastList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () async {
+                    Cast? cast = _moviesModel?.movieCastList[index];
+                    _moviesModel
+                        ?.getCastMemberDetailsFromApi(cast!.id.toString());
+
+                    _globalModel?.setBottomNavIndex(5, currentIndex: 4);
+                  },
+                  child: Container(
+                    height: 200,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: PosterImageCard(
+                      borderRadius: 20,
+                      heightScale: 0.1,
+                      widthScale: 0.3,
+                      shadowBlurRadius: 8,
+                      shadowSpreadRadius: 3,
+                      imageUrl:
+                          '${APIConfig.image_profile_url}${_moviesModel?.movieCastList[index].profilePath}',
+                    ),
+                  ),
+                );
+              }),
+          Visibility(
+            child: Center(
+              child: SpinKitFadingCircle(
+                color: Colors.black,
+              ),
+            ),
+            visible: false,
+          )
         ],
       ),
     );
