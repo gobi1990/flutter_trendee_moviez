@@ -17,4 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 - Screens
 
-![image](https://drive.google.com/uc?export=view&id=1R4A_FvuIQWSo60ie7ydA0cUT6K5y72vq)
+<a href="https://drive.google.com/uc?export=view&id=1R4A_FvuIQWSo60ie7ydA0cUT6K5y72vq"><img src="https://drive.google.com/uc?export=view&id=1R4A_FvuIQWSo60ie7ydA0cUT6K5y72vq" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" />
