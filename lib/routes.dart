@@ -34,7 +34,8 @@ class Routes {
 
   static final routes = <String, WidgetBuilder>{
     search: (BuildContext context) => FavouriteScreen(),
-    moviedetail: (BuildContext context) => MovieDetailsScreen()
+    moviedetail: (BuildContext context) => MovieDetailsScreen(),
+    initial: (BuildContext context) => InitialScreen(),
   };
 
 ///////////// Screen route generator ..................
