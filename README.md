@@ -17,7 +17,7 @@ Used Dio package to implement API connection and used MVVM pattern to connect UI
 
 Screens
 
-<a href="https://drive.google.com/uc?export=view&id=1RivwCpnL1_U8hpqt8cqaWNoEVN59L2oi"><img src="https://drive.google.com/uc?export=view&id=1RivwCpnL1_U8hpqt8cqaWNoEVN59L2oi" style="width: 346px; max-width: 100%; height: auto" title="Screen git 1" />
+<img src="https://drive.google.com/uc?export=view&id=1RivwCpnL1_U8hpqt8cqaWNoEVN59L2oi" width="346" height="672" />
 <img src="https://drive.google.com/uc?export=view&id=1Rm54TXFmVuDqBjOp3JLuQrg71mGPmX3s" width="346" height="672" />
 
 <a href="https://drive.google.com/uc?export=view&id=1R4A_FvuIQWSo60ie7ydA0cUT6K5y72vq"><img src="https://drive.google.com/uc?export=view&id=1R4A_FvuIQWSo60ie7ydA0cUT6K5y72vq" style="width: 200px; max-width: 100%; height: auto" title="Screen 1" />
