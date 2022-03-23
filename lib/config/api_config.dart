@@ -1,6 +1,6 @@
 class APIConfig {
   //////////////////////// TMDB API key...................
-  static String api_key = {{API KEY}};
+  static String api_key = $TMDB_API_KEY;
 
   ///////////////////// Base Url ........ Movies DB.................
   static String base_url = "https://api.themoviedb.org/3/";
